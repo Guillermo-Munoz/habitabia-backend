@@ -5,7 +5,7 @@ Los usuarios pueden publicar habitaciones, buscar disponibilidad y gestionar res
 **Los pagos se acuerdan directamente entre las partes** — la plataforma solo conecta hosts y guests.
 
 ---
-![Diseño de Interfaz de Habitia](./assets/figma-preview.png)
+![Diseño de Interfaz de Habitia](./habitabia.png)
 
 ## Stack tecnológico
 
