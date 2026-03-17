@@ -23,7 +23,6 @@ services:
     container_name: habitia-app
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/habitia
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/habitia
       SPRING_DATASOURCE_USERNAME: habitia
       SPRING_DATASOURCE_PASSWORD: habitia
       APP_JWT_SECRET: "SRy27MmribaLkBtOJScXNSe3UoERIo6ji4kbpfLjWbM1qbu4LqXCbakpcjXFuu43QLhRXPgF5FP3tjrNlyNE3G"
