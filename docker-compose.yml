@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: habitia-postgres
+    environment:
+      POSTGRES_DB: habitia
+      POSTGRES_USER: habitia
+      POSTGRES_PASSWORD: habitia
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - habitia-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: habitia-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/habitia
+      SPRING_DATASOURCE_USERNAME: habitia
+      SPRING_DATASOURCE_PASSWORD: habitia
+      APP_JWT_SECRET: "SRy27MmribaLkBtOJScXNSe3UoERIo6ji4kbpfLjWbM1qbu4LqXCbakpcjXFuu43QLhRXPgF5FP3tjrNlyNE3G"
+      APP_JWT_EXPIRATION_MS: 86400000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - habitia-net
+
+volumes:
+  pgdata:
+
+networks:
+  habitia-net:
+    driver: bridge

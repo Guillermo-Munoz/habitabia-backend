@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: habitia-app
+  namespace: habitia
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: habitia-app
+  template:
+    metadata:
+      labels:
+        app: habitia-app
+    spec:
+      containers:
+        - name: habitia-app
+          image: habitia/app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/habitia
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: APP_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: jwt-secret
+            - name: APP_JWT_EXPIRATION_MS
+              value: "86400000"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 40
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: habitia-app
+  namespace: habitia
+spec:
+  selector:
+    app: habitia-app
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer

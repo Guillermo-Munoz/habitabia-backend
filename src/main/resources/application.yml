@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/habitia
+    username: habitia
+    password: habitia
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+app:
+  jwt:
+    secret: "a4pg1GSnK9CH7x8jHtTeTDKBuFwhuGOAicr2ZXzSOEBM5ZXjzw4r5BEN5UQEOF6UcEmQONyYqbtzeeKMzOTSyF"
+    expirationMs: 86400000  # 24h
