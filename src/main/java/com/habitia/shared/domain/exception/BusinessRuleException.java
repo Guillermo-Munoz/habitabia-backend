@@ -1,7 +1,7 @@
 package com.habitia.shared.domain.exception;
 
-public class BusinnesRulesExceotion extends DomainException{
-    public BusinnesRulesExceotion(String message){
+public class BusinessRuleException extends DomainException{
+    public BusinessRuleException(String message){
         super(message);
     }
 }

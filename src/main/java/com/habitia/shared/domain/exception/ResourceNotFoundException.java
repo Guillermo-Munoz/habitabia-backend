@@ -1,7 +1,7 @@
 package com.habitia.shared.domain.exception;
 
-public class ResourceNoFoundException extends DomainException {
-    public ResourceNoFoundException(String resource, String id){
+public class ResourceNotFoundException extends DomainException {
+    public ResourceNotFoundException(String resource, String id){
         super(resource + " not found whit id: " + id);
     }
 }
