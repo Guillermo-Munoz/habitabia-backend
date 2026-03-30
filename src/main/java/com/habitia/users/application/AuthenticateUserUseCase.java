@@ -36,7 +36,7 @@ public class AuthenticateUserUseCase {
                     return new BusinessRuleException("Invalid credentials");
                 });
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+         if (!user.passwordMatches(password, passwordEncoder)) {
             log.warn("Contraseña incorrecta para usuario: {}", email);
             throw new BusinessRuleException("Invalid credentials");
         }

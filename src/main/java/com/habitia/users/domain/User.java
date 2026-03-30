@@ -24,27 +24,31 @@ public class User {
 
     // Constructor para usuario normal (rol USER por defecto)
     public User(String fullName, String email, String password) {
-        validateFullName(fullName);
-        validateEmail(email);
+        String normalizedFullName = normalize(fullName);
+        String normalizedEmail = normalizeEmail(email);
+        validateFullName(normalizedFullName);
+        validateEmail(normalizedEmail);
         this.id = UserId.generate();
-        this.fullName = fullName.trim();
-        this.email = email.trim().toLowerCase();
+        this.fullName = normalizedFullName;
+        this.email = normalizedEmail;
         this.password = password;
         this.role = UserRole.USER;
         this.active = true;
         this.createdAt = LocalDateTime.now();
     }
 
-    // Constructor para admin (rol explícito)
+    // Constructor con rol explícito — solo permite USER
     public User(String fullName, String email, String password, UserRole role) {
-        if (role != UserRole.ADMIN) {
-            throw new IllegalArgumentException("Solo se puede crear ADMIN con este constructor");
+        if (role != UserRole.USER) {
+            throw new IllegalArgumentException("El registro solo permite el rol USER");
         }
-        validateFullName(fullName);
-        validateEmail(email);
+        String normalizedFullName = normalize(fullName);
+        String normalizedEmail = normalizeEmail(email);
+        validateFullName(normalizedFullName);
+        validateEmail(normalizedEmail);
         this.id = UserId.generate();
-        this.fullName = fullName.trim();
-        this.email = email.trim().toLowerCase();
+        this.fullName = normalizedFullName;
+        this.email = normalizedEmail;
         this.password = password;
         this.role = role;
         this.active = true;
@@ -68,8 +72,9 @@ public class User {
 
     // Métodos de negocio
     public void updateProfile(String fullName, String bio, String avatarUrl) {
-        validateFullName(fullName);
-        this.fullName = fullName.trim();
+        String normalizedFullName = normalize(fullName);
+        validateFullName(normalizedFullName);
+        this.fullName = normalizedFullName;
         this.bio = bio != null ? bio.trim() : null;
         this.avatarUrl = avatarUrl != null ? avatarUrl.trim() : null;
     }
@@ -97,7 +102,16 @@ public class User {
         return this.role == UserRole.ADMIN;
     }
 
-    // Validaciones privadas
+    // Normalización — transforma los datos antes de validar
+    private String normalize(String value) {
+        return value != null ? value.trim() : null;
+    }
+
+    private String normalizeEmail(String email) {
+        return email != null ? email.trim().toLowerCase() : null;
+    }
+
+    // Validaciones — solo validan, no transforman
     private void validateFullName(String fullName) {
         if (fullName == null || fullName.isBlank()) {
             throw new IllegalArgumentException("El nombre no puede estar vacío");

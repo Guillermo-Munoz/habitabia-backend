@@ -38,9 +38,26 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
+                    // 1. Auth pública
                     auth.requestMatchers("/api/v1/auth/**").permitAll();
+
+                    // 2. Swagger y OpenAPI (Asegúrate de incluir los recursos estáticos)
+                    auth.requestMatchers(
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/webjars/**"
+                    ).permitAll();
+
+                    // 3. Scalar (La ruta que creamos para tu interfaz moderna)
+                    auth.requestMatchers("/docs", "/scalar.html").permitAll();
+
+                    // 4. Todo lo demás protegido
                     auth.anyRequest().authenticated();
-                    System.out.println("📋 Reglas de autorización configuradas");
+                    
+                    System.out.println("📋 Reglas de autorización configuradas con Swagger y Scalar");
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

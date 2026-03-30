@@ -2,7 +2,9 @@ package com.habitia.users.domain;
 
 import com.habitia.shared.domain.valueobject.UserId;
 import com.habitia.users.infrastructure.persistence.UserJpaEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
 
     public UserJpaEntity toEntity(User user, String newPassword) {
