@@ -5,7 +5,10 @@ import com.habitia.shared.domain.valueobject.UserId;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
 
 @Getter
 public class Room {
@@ -23,6 +26,7 @@ public class Room {
     private int maxGuests;
     private RoomStatus status;
     private final LocalDateTime createdAt;
+    private final List<String> imageUrls;
 
     // Constructor para crear habitación nueva
     public Room(UserId hostId, String title, String description,
@@ -42,6 +46,7 @@ public class Room {
         this.maxGuests = maxGuests;
         this.status = RoomStatus.ACTIVE;
         this.createdAt = LocalDateTime.now();
+        this.imageUrls = new ArrayList<>();
     }
 
     // Constructor para reconstruir desde persistencia
@@ -49,7 +54,7 @@ public class Room {
                 String street, String city, String country,
                 Double latitude, Double longitude,
                 Money price, int maxGuests,
-                RoomStatus status, LocalDateTime createdAt) {
+                RoomStatus status, LocalDateTime createdAt, List<String> imageUrls) {
         this.id = id;
         this.hostId = hostId;
         this.title = title;
@@ -63,6 +68,8 @@ public class Room {
         this.maxGuests = maxGuests;
         this.status = status;
         this.createdAt = createdAt;
+        this.imageUrls = new ArrayList<>(imageUrls);
+
     }
 
     public void update(String title, String description, String street,
@@ -86,5 +93,17 @@ public class Room {
 
     public boolean isActive() {
         return this.status == RoomStatus.ACTIVE;
+    }
+
+    public void addImage(String imageUrl){
+        this.imageUrls.add(imageUrl);
+    }
+
+    public void removeImage(String imageUrl){
+        this.imageUrls.remove(imageUrl);
+    }
+
+    public List<String> getImageUrls() {
+        return new ArrayList<>(imageUrls);
     }
 }
