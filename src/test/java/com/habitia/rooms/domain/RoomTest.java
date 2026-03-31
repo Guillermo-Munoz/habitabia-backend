@@ -78,7 +78,7 @@ class RoomTest {
 
         Room room = new Room(id, hostId, "Piso céntrico", "Descripción", "Calle Mayor 1",
                 "Madrid", "España", 40.4168, -3.7038, precio, 2,
-                RoomStatus.INACTIVE, createdAt);
+                RoomStatus.INACTIVE, createdAt, null);
 
         assertEquals(id, room.getId());
         assertEquals(hostId, room.getHostId());
@@ -174,7 +174,7 @@ class RoomTest {
     void isActive_conEstadoInactive_deberiaRetornarFalse() {
         Room room = new Room(UUID.randomUUID(), hostId, "Piso", "Desc", "Calle 1",
                 "Madrid", "España", 40.4168, -3.7038, precio, 2,
-                RoomStatus.INACTIVE, LocalDateTime.now());
+                RoomStatus.INACTIVE, LocalDateTime.now(), null);
 
         assertFalse(room.isActive());
     }
@@ -184,7 +184,7 @@ class RoomTest {
     void isActive_conEstadoDeleted_deberiaRetornarFalse() {
         Room room = new Room(UUID.randomUUID(), hostId, "Piso", "Desc", "Calle 1",
                 "Madrid", "España", 40.4168, -3.7038, precio, 2,
-                RoomStatus.DELETED, LocalDateTime.now());
+                RoomStatus.DELETED, LocalDateTime.now(), null);
 
         assertFalse(room.isActive());
     }

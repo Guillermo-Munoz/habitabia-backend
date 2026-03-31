@@ -19,12 +19,12 @@ public class SecurityConfig {
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        System.out.println("⭐⭐⭐ CONFIGURACIÓN DE SEGURIDAD CARGADA ⭐⭐⭐");
+        System.out.println("CONFIGURACIÓN DE SEGURIDAD CARGADA");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        System.out.println("🔐 PasswordEncoder BCrypt creado");
+        System.out.println("PasswordEncoder BCrypt creado");
         return new BCryptPasswordEncoder();  // ← ¡Esto es lo que faltaba!
     }
 
@@ -54,10 +54,13 @@ public class SecurityConfig {
                     // 3. Scalar (La ruta que creamos para tu interfaz moderna)
                     auth.requestMatchers("/docs", "/scalar.html").permitAll();
 
-                    // 4. Todo lo demás protegido
+                    // 4. Archivos de imagen públicos
+                    auth.requestMatchers("/uploads/**").permitAll();
+
+                    // 5. Todo lo demás protegido
                     auth.anyRequest().authenticated();
                     
-                    System.out.println("📋 Reglas de autorización configuradas con Swagger y Scalar");
+                    System.out.println("Reglas de autorización configuradas con Swagger y Scalar");
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

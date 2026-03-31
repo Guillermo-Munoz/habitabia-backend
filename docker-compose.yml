@@ -27,8 +27,12 @@ services:
       SPRING_DATASOURCE_PASSWORD: habitia
       APP_JWT_SECRET: "SRy27MmribaLkBtOJScXNSe3UoERIo6ji4kbpfLjWbM1qbu4LqXCbakpcjXFuu43QLhRXPgF5FP3tjrNlyNE3G"
       APP_JWT_EXPIRATION_MS: 86400000
+      APP_STORAGE_UPLOAD_DIR: /app/uploads
+      APP_STORAGE_BASE_URL: http://localhost:8080
     ports:
       - "8080:8080"
+    volumes:
+      - uploads:/app/uploads
     depends_on:
       - postgres
     networks:
@@ -36,6 +40,7 @@ services:
 
 volumes:
   pgdata:
+  uploads:
 
 networks:
   habitia-net:

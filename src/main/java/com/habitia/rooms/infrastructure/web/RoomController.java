@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,13 +18,16 @@ public class RoomController {
     private final PublishRoomUseCase publishRoomUseCase;
     private final SearchRoomsUseCase searchRoomsUseCase;
     private final GetRoomUseCase getRoomUseCase;
+    private final UploadRoomImageUseCase uploadRoomImageUseCase;
 
     public RoomController(PublishRoomUseCase publishRoomUseCase,
                           SearchRoomsUseCase searchRoomsUseCase,
-                          GetRoomUseCase getRoomUseCase) {
+                          GetRoomUseCase getRoomUseCase,
+                          UploadRoomImageUseCase uploadRoomImageUseCase) {
         this.publishRoomUseCase = publishRoomUseCase;
         this.searchRoomsUseCase = searchRoomsUseCase;
         this.getRoomUseCase = getRoomUseCase;
+        this.uploadRoomImageUseCase = uploadRoomImageUseCase;
     }
 
     @PostMapping
@@ -57,5 +61,14 @@ public class RoomController {
     @GetMapping("/{id}")
     public ResponseEntity<RoomResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(RoomResponse.from(getRoomUseCase.execute(id)));
+    }
+
+    @PostMapping("/{id}/images")
+    public ResponseEntity<RoomResponse> uploadImage(
+            @PathVariable UUID id,
+            @RequestParam("file") MultipartFile file,
+            Authentication auth) {
+        var room = uploadRoomImageUseCase.execute(id, auth.getName(), file);
+        return ResponseEntity.ok(RoomResponse.from(room));
     }
 }

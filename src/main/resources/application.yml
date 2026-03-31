@@ -16,3 +16,6 @@ app:
   jwt:
     secret: "a4pg1GSnK9CH7x8jHtTeTDKBuFwhuGOAicr2ZXzSOEBM5ZXjzw4r5BEN5UQEOF6UcEmQONyYqbtzeeKMzOTSyF"
     expirationMs: 86400000  # 24h
+  storage:
+    upload-dir: ./uploads
+    base-url: http://localhost:8080

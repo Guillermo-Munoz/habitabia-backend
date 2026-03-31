@@ -58,6 +58,7 @@ public class RoomRepositoryAdapter implements RoomRepository {
         e.setMaxGuests(room.getMaxGuests());
         e.setStatus(room.getStatus().name());
         e.setCreatedAt(room.getCreatedAt());
+        e.setImageUrls(room.getImageUrls());
         return e;
     }
 
@@ -75,7 +76,8 @@ public class RoomRepositoryAdapter implements RoomRepository {
                 Money.of(e.getPriceAmount(), e.getPriceCurrency()),
                 e.getMaxGuests(),
                 RoomStatus.valueOf(e.getStatus()),
-                e.getCreatedAt()
+                e.getCreatedAt(),
+                e.getImageUrls() != null ? e.getImageUrls() : List.of()
         );
     }
 }

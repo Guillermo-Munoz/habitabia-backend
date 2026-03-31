@@ -3,6 +3,7 @@ package com.habitia.rooms.infrastructure.web;
 import com.habitia.rooms.domain.Room;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public record RoomResponse(
@@ -15,7 +16,8 @@ public record RoomResponse(
         BigDecimal priceAmount,
         String priceCurrency,
         int maxGuests,
-        String status
+        String status,
+        List<String> imageUrls
 ) {
     public static RoomResponse from(Room room) {
         return new RoomResponse(
@@ -28,7 +30,8 @@ public record RoomResponse(
                 room.getPrice().amount(),
                 room.getPrice().currency(),
                 room.getMaxGuests(),
-                room.getStatus().name()
+                room.getStatus().name(),
+                room.getImageUrls()
         );
     }
 }

@@ -27,6 +27,11 @@ CREATE TABLE IF NOT EXISTS rooms (
     created_at     TIMESTAMPTZ NOT NULL
     );
 
+CREATE TABLE IF NOT EXISTS room_images (
+    room_id    UUID NOT NULL REFERENCES rooms(id) ON DELETE CASCADE,
+    image_url  VARCHAR(500) NOT NULL
+    );
+
 CREATE TABLE IF NOT EXISTS bookings (
                                         id          UUID PRIMARY KEY,
                                         room_id     UUID NOT NULL REFERENCES rooms(id),
