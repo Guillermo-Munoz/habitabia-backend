@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     rating          INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     comment         VARCHAR(1000),
     created_at      TIMESTAMPTZ NOT NULL,
-    is_host_review  BOOLEAN NOT NULL DEFAULT false,
+    is_review_for_host  BOOLEAN NOT NULL DEFAULT false,
     is_public       BOOLEAN NOT NULL DEFAULT true,
     is_approved     BOOLEAN NOT NULL DEFAULT false,
     is_deleted      BOOLEAN NOT NULL DEFAULT false,
@@ -68,4 +68,10 @@ CREATE TABLE IF NOT EXISTS reviews (
     host_response   VARCHAR(1000),
     responded_at    TIMESTAMPTZ,
     deleted_at      TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS banned_words (
+    id          UUID PRIMARY KEY,
+    word        VARCHAR(100) NOT NULL UNIQUE,
+    created_at  TIMESTAMPTZ NOT NULL
 );
