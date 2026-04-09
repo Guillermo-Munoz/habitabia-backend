@@ -3,7 +3,7 @@ package com.habitia.reviews.infrastructure.web;
 import com.habitia.reviews.application.GetReviewsByBookingUseCase;
 import com.habitia.reviews.application.GetReviewsByRoomUseCase;
 import com.habitia.reviews.application.SubmitReviewCommand;
-import com.habitia.reviews.application.SubmitReviewsUseCase;
+import com.habitia.reviews.application.SubmitReviewUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,11 +16,11 @@ import java.util.UUID;
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
 
-    private final SubmitReviewsUseCase submitReviewUseCase;
+    private final SubmitReviewUseCase submitReviewUseCase;
     private final GetReviewsByBookingUseCase getReviewsByBookingUseCase;
     private final GetReviewsByRoomUseCase getReviewsByRoomUseCase;
 
-    public ReviewController(SubmitReviewsUseCase submitReviewUseCase,
+    public ReviewController(SubmitReviewUseCase submitReviewUseCase,
                             GetReviewsByBookingUseCase getReviewsByBookingUseCase,
                             GetReviewsByRoomUseCase getReviewsByRoomUseCase) {
         this.submitReviewUseCase = submitReviewUseCase;
