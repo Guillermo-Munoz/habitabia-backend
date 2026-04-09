@@ -9,10 +9,10 @@ import com.habitia.reviews.domain.Review;
 import com.habitia.reviews.domain.ReviewRepository;
 
 @Service
-public class GetReviewByRoomUseCase {
+public class GetReviewsByRoomUseCase {
     private final ReviewRepository reviewRepository;
 
-    public GetReviewByRoomUseCase(ReviewRepository reviewRepository) {
+    public GetReviewsByRoomUseCase(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
     }
 

@@ -96,7 +96,7 @@ public class Review {
 
     public void approve() {
         if (this.isDeleted) throw new IllegalStateException("Cannot approve a deleted review");
-        if (this.isApproved()) throw new IllegalStateException("Review is already approved");
+        if (this.isApproved) throw new IllegalStateException("Review is already approved");
         this.isApproved = true;
         this.approvedAt = LocalDateTime.now();
     }
