@@ -10,5 +10,6 @@ public interface ReviewRepository {
     List<Review> findByBookingId(UUID id);
     List<Review> findByRoomId(UUID id);
     boolean existsByBookingIdAndReviewerId(UUID bookingId, UUID reviewerId);
-    
+    List<Review> findFlaggedPendingReview();
+
 }
