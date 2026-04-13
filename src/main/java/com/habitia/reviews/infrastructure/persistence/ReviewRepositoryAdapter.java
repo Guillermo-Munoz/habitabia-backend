@@ -44,4 +44,11 @@ public class ReviewRepositoryAdapter implements ReviewRepository {
     public boolean existsByBookingIdAndReviewerId(UUID bookingId, UUID reviewerId) {
         return jpaRepository.existsByBookingIdAndReviewerId(bookingId, reviewerId);
     }
+    @Override
+    public List<Review> findFlaggedPendingReview() {
+        return jpaRepository.findFlaggedPendingReview().stream()
+        .map(mapper::toDomain)
+        .toList();
+    }
+
 }

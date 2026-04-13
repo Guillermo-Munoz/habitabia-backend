@@ -17,5 +17,7 @@ public interface ReviewJpaRepository extends JpaRepository<ReviewJpaEntity, UUID
     List<ReviewJpaEntity> findByRoomId(@Param("roomId") UUID roomId);
     boolean existsByBookingIdAndReviewerId(UUID bookingId, UUID reviewerId);
 
+    @Query("SELECT r FROM ReviewJpaEntity r WHERE r.idFlagged = true AND r.isApproved = false AND r.isDeleted = false")
+    List<ReviewJpaEntity> findFlaggedPendingReview();
 
 } 
