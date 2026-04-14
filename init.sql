@@ -75,3 +75,20 @@ CREATE TABLE IF NOT EXISTS banned_words (
     word        VARCHAR(100) NOT NULL UNIQUE,
     created_at  TIMESTAMPTZ NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS conversations (
+    id          UUID PRIMARY KEY,
+    booking_id  UUID NOT NULL UNIQUE REFERENCES bookings(id),
+    guest_id    UUID NOT NULL REFERENCES users(id),
+    host_id     UUID NOT NULL REFERENCES users(id),
+    created_at  TIMESTAMPTZ NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id               UUID PRIMARY KEY,
+    conversation_id  UUID NOT NULL REFERENCES conversations(id),
+    sender_id        UUID NOT NULL REFERENCES users(id),
+    content          VARCHAR(2000) NOT NULL,
+    sent_at          TIMESTAMPTZ NOT NULL,
+    is_read          BOOLEAN NOT NULL DEFAULT false
+);
