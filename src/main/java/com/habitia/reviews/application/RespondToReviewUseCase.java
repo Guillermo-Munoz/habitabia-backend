@@ -1,21 +1,26 @@
 package com.habitia.reviews.application;
 
-import org.springframework.stereotype.Service;
-
 import com.habitia.bookings.domain.BookingRepository;
+import com.habitia.notifications.application.CreateNotificationUseCase;
+import com.habitia.notifications.domain.NotificationType;
 import com.habitia.reviews.domain.Review;
 import com.habitia.reviews.domain.ReviewRepository;
 import com.habitia.shared.domain.exception.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 @Service
 public class RespondToReviewUseCase {
 
     private final ReviewRepository reviewRepository;
     private final BookingRepository bookingRepository;
+    private final CreateNotificationUseCase createNotification;
 
-    public RespondToReviewUseCase(ReviewRepository reviewRepository, BookingRepository bookingRepository) {
+    public RespondToReviewUseCase(ReviewRepository reviewRepository,
+                                  BookingRepository bookingRepository,
+                                  CreateNotificationUseCase createNotification) {
         this.reviewRepository = reviewRepository;
         this.bookingRepository = bookingRepository;
+        this.createNotification = createNotification;
     }
 
     /**
@@ -29,12 +34,16 @@ public class RespondToReviewUseCase {
         var booking = bookingRepository.findById(review.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", review.getBookingId().toString()));
 
-        // Solo el anfitrión de la reserva puede responder
         if (!booking.getHostId().value().equals(command.hostId())) {
             throw new IllegalArgumentException("Host is not the owner of the booking related to this review.");
         }
 
         review.respondToReview(command.response(), command.hostId());
-        return reviewRepository.save(review);
+        Review saved = reviewRepository.save(review);
+
+        createNotification.execute(saved.getReviewerId(), NotificationType.REVIEW_RESPONSE,
+                "The host has responded to your review", saved.getId());
+
+        return saved;
     }
 }

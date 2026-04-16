@@ -92,3 +92,13 @@ CREATE TABLE IF NOT EXISTS messages (
     sent_at          TIMESTAMPTZ NOT NULL,
     is_read          BOOLEAN NOT NULL DEFAULT false
 );
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id            UUID PRIMARY KEY,
+    recipient_id  UUID NOT NULL REFERENCES users(id),
+    type          VARCHAR(50) NOT NULL,
+    message       VARCHAR(500) NOT NULL,
+    reference_id  UUID,
+    is_read       BOOLEAN NOT NULL DEFAULT false,
+    created_at    TIMESTAMPTZ NOT NULL
+);
