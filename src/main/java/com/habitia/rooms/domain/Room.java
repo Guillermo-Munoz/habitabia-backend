@@ -68,7 +68,7 @@ public class Room {
         this.maxGuests = maxGuests;
         this.status = status;
         this.createdAt = createdAt;
-        this.imageUrls = new ArrayList<>(imageUrls);
+        this.imageUrls = imageUrls != null ? new ArrayList<>(imageUrls) : new ArrayList<>();
 
     }
 
