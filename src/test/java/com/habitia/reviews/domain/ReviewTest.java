@@ -282,9 +282,17 @@ public class ReviewTest {
         assertThrows(IllegalArgumentException.class,
             () -> review.respondToReview("Response", null));
     }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("should throw exception when response is null or empty")
+    void shouldThrowException_whenResponseIsNullOrEmpty(String response) {
+        assertThrows(IllegalArgumentException.class,
+            () -> review.respondToReview(response, UUID.randomUUID()));
+    }
     @Test
     @DisplayName("should throw exception when review is not for host")
-    void sholdThrowException_whenRevieweIsNotForHost(){
+    void shouldThrowException_whenReviewIsNotForHost(){
         Review reviewNotForHost = new Review(
             bookingId,
             reviewerId,
@@ -295,29 +303,83 @@ public class ReviewTest {
         );
         assertThrows(IllegalStateException.class,
             () -> reviewNotForHost.respondToReview("Thanks", UUID.randomUUID()));
-    }
+    }  
+     @Test
+     @DisplayName("should not allow responding to a deleted review")
+     void shouldThrowException_whenRespondingToDeletedReviewAfterLifecycle(){
+        UUID hostId = UUID.randomUUID();
+        review.softDelete(reviewerId);
+        assertThrows(IllegalStateException.class, 
+            () -> review.respondToReview("responded review delete", hostId));
+
+     }
     @Test
-    @DisplayName("should throw exception when review si delete")
-    void shouldThrowExceptionWhenReviewIsDelete(){
+    @DisplayName("should respond to review successfully")
+    void shouldRespondToReviewSuccessfully() {
+
+        UUID hostId = UUID.randomUUID();
+        String responseText = "Thanks for your stay!";
+
+        review.respondToReview(responseText, hostId);
+
+        assertAll(
+            () -> assertTrue(review.isResponded()),
+            () -> assertEquals(responseText, review.getHostResponse()),
+            () -> assertNotNull(review.getRespondedAt())
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // softDelete
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("should soft delete review successfully")
+    void shouldSoftDeleteReviewSuccessfully() {
+        review.softDelete(reviewerId);
+        
+        assertAll(
+            () -> assertTrue(review.isDeleted()),
+            () -> assertNotNull(review.getDeletedAt())
+        );
+    }
+
+    @Test
+    @DisplayName("should throw exception when non reviewer tries to delete")
+    void shouldThrowException_whenNonReviewerTriesToDelete() {
+        UUID strangerId = UUID.randomUUID();
+
+        assertThrows(IllegalStateException.class,
+            () -> review.softDelete(strangerId));
+    }
+
+    @Test
+    @DisplayName("should throw exception when deleting already deleted review")
+    void shouldThrowException_whenReviewIsAlreadyDeleted() {
         review.softDelete(reviewerId);
         assertThrows(IllegalStateException.class,
-            () -> review.respondToReview("comment", UUID.randomUUID()));
-        
+            () -> review.softDelete(reviewerId));
     }
+
+    // -------------------------------------------------------------------------
+    // verify
+    // -------------------------------------------------------------------------
+
     @Test
-    @DisplayName("should throw exception when review is already responded")
-    void shouldThrowExceptionWhenReviewIsResponded(){
-        UUID hostId = UUID.randomUUID();
-        review.respondToReview("first response", hostId);
-        assertThrows(IllegalStateException.class,
-            () -> review.respondToReview("second response", hostId));
+    @DisplayName("should verify review successfully")
+    void shouldVerifyReviewSuccessfully() {
+        review.verify();
+        assertTrue(review.isVerified());
     }
 
-
-
-
-
-
+    @Test
+    @DisplayName("should throw exception when verifying deleted review")
+    void shouldThrowException_whenVerifyingDeletedReview() {
+        review.softDelete(reviewerId);
+        
+        assertThrows(IllegalStateException.class, 
+            () -> review.verify());
+    }
 
 
 
