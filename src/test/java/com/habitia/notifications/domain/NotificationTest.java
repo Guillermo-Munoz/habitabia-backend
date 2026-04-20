@@ -1,21 +1,21 @@
 package com.habitia.notifications.domain;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-public class NotificationTest {
-    
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class NotificationTest {
+
     private UUID recipientId;
     private UUID referenceId;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         recipientId = UUID.randomUUID();
         referenceId = UUID.randomUUID();
     }
@@ -26,42 +26,49 @@ public class NotificationTest {
 
     @Nested
     @DisplayName("Creation rules")
-    class CreationRules{
+    class CreationRules {
+
         @Test
         @DisplayName("should initialize with correct default state")
-        void shouldInitializeWithCorrectDefaulStated(){
+        void shouldInitializeWithCorrectDefaultState() {
             Notification notification = new Notification(
-                recipientId, NotificationType.REVIEW_RECEIVED, "You have a new review", referenceId);
+                    recipientId, NotificationType.REVIEW_RECEIVED, "You have a new review", referenceId);
 
             assertAll(
-                () -> assertNotNull(notification.getId()),
-                () -> assertFalse(notification.isRead()),
-                () -> assertNotNull(notification.getCreatedAt()),
-                () -> assertEquals(recipientId, notification.getRecipientId()),
-                () -> assertEquals(NotificationType.REVIEW_RECEIVED, notification.getType()));    
+                    () -> assertNotNull(notification.getId()),
+                    () -> assertFalse(notification.isRead()),
+                    () -> assertNotNull(notification.getCreatedAt()),
+                    () -> assertEquals(recipientId, notification.getRecipientId()),
+                    () -> assertEquals(NotificationType.REVIEW_RECEIVED, notification.getType())
+            );
         }
+
         @Test
-        @DisplayName("should throw exception when reciver is null")
-        void shouldException_WhenRecivedIsNull(){
-            assertThrows(IllegalArgumentException.class, 
-                () -> new Notification(null, NotificationType.MESSAGE_RECEIVED, "Aproved", referenceId));
+        @DisplayName("should throw exception when recipientId is null")
+        void shouldThrowException_whenRecipientIdIsNull() {
+            assertThrows(IllegalArgumentException.class,
+                    () -> new Notification(null, NotificationType.MESSAGE_RECEIVED, "Approved", referenceId));
         }
+
         @Test
         @DisplayName("should throw exception when type is null")
-        void shouldException_whenTypeIsNull(){
+        void shouldThrowException_whenTypeIsNull() {
             assertThrows(IllegalArgumentException.class,
-                () -> new Notification(recipientId, null, "mensaje", referenceId));
+                    () -> new Notification(recipientId, null, "message", referenceId));
         }
+
         @Test
         @DisplayName("should throw exception when message is blank")
-        void shouldException_whenMessageIsNull(){
+        void shouldThrowException_whenMessageIsBlank() {
             assertThrows(IllegalArgumentException.class,
-                () -> new Notification(recipientId, NotificationType.REVIEW_RECEIVED, "  ", referenceId));
+                    () -> new Notification(recipientId, NotificationType.REVIEW_RECEIVED, "  ", referenceId));
         }
+
         @Test
-        @DisplayName("should throw alow null referenceId")
-        void shouldAlowNullReferenceId(){
-            assertDoesNotThrow( () -> new Notification(recipientId, NotificationType.REVIEW_RECEIVED, "message", null));
+        @DisplayName("should allow null referenceId")
+        void shouldAllowNullReferenceId() {
+            assertDoesNotThrow(() ->
+                    new Notification(recipientId, NotificationType.REVIEW_RECEIVED, "message", null));
         }
     }
 
@@ -71,48 +78,55 @@ public class NotificationTest {
 
     @Nested
     @DisplayName("State transitions")
-    class StateTransitions{
-    
+    class StateTransitions {
+
         @Test
-        @DisplayName("shuol mark notification as read")
-        void shouldMarkNotificationAsRead(){
-            Notification notification = new Notification(recipientId, NotificationType.MESSAGE_RECEIVED, "New message", referenceId);
+        @DisplayName("should mark notification as read")
+        void shouldMarkNotificationAsRead() {
+            Notification notification = new Notification(
+                    recipientId, NotificationType.MESSAGE_RECEIVED, "New message", referenceId);
+
             notification.markAsRead();
+
             assertTrue(notification.isRead());
         }
+
         @Test
         @DisplayName("should remain read when markAsRead is called multiple times")
         void shouldRemainRead_whenMarkAsReadCalledMultipleTimes() {
-            Notification notification = new Notification(recipientId, NotificationType.MESSAGE_RECEIVED, "New message", referenceId);
+            Notification notification = new Notification(
+                    recipientId, NotificationType.MESSAGE_RECEIVED, "New message", referenceId);
+
             notification.markAsRead();
             notification.markAsRead();
+
             assertTrue(notification.isRead());
         }
     }
+
     // -------------------------------------------------------------------------
     // Full flow
     // -------------------------------------------------------------------------
 
     @Nested
     @DisplayName("Full flow")
-    class FullName{
+    class FullFlow {
 
         @Test
-        @DisplayName("should transition from unread to read")
-        void shouldTransitionFromUnreadToRead(){
-            Notification notification = new Notification(recipientId, NotificationType.MESSAGE_RECEIVED, "New message", referenceId);
+        @DisplayName("should transition from unread to read correctly")
+        void shouldTransitionFromUnreadToRead() {
+            Notification notification = new Notification(
+                    recipientId, NotificationType.MESSAGE_RECEIVED, "New message", referenceId);
+
             assertFalse(notification.isRead());
+
             notification.markAsRead();
-            assertTrue(notification.isRead());
+
+            assertAll(
+                    () -> assertTrue(notification.isRead()),
+                    () -> assertEquals(recipientId, notification.getRecipientId()),
+                    () -> assertNotNull(notification.getId())
+            );
         }
-
-
     }
-
-
-
-
-
-    }
-
-    
+}
