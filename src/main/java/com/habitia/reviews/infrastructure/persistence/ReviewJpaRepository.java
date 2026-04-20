@@ -30,5 +30,15 @@ public interface ReviewJpaRepository extends JpaRepository<ReviewJpaEntity, UUID
 
     @Query("SELECT r FROM ReviewJpaEntity r WHERE r.isFlagged = true AND r.isApproved = false AND r.isDeleted = false")
     Page<ReviewJpaEntity> findFlaggedPendingReview(Pageable pageable);
+    
+    @Query("SELECT AVG(r.rating) FROM ReviewJpaEntity r " +
+       "JOIN BookingJpaEntity b ON r.bookingId = b.id " +
+       "WHERE b.roomId = :roomId AND r.isApproved = true AND r.isDeleted = false")
+    Double findAverageRatingByRoomId(@Param("roomId") UUID roomId);
+
+    @Query("SELECT COUNT(r) FROM ReviewJpaEntity r " +
+       "JOIN BookingJpaEntity b ON r.bookingId = b.id " +
+       "WHERE b.roomId = :roomId AND r.isApproved = true AND r.isDeleted = false")
+    long countApprovedByRoomId(@Param("roomId") UUID roomId);
 
 } 

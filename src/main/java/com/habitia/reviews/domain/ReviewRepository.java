@@ -16,5 +16,6 @@ public interface ReviewRepository {
     List<Review> findFlaggedPendingReview();
     Page<Review> findByRoomId(UUID id, Pageable pageable);
     Page<Review> findFlaggedPendingReview(Pageable pageable);
+    RoomRatingStats getRatingStatsByRoomId(UUID roomId);
 
 }

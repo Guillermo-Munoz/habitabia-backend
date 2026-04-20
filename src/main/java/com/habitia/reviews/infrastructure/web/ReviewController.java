@@ -6,6 +6,9 @@ import com.habitia.reviews.application.RespondToReviewCommand;
 import com.habitia.reviews.application.RespondToReviewUseCase;
 import com.habitia.reviews.application.SubmitReviewCommand;
 import com.habitia.reviews.application.SubmitReviewUseCase;
+import com.habitia.reviews.domain.RoomRatingStats;
+import com.habitia.reviews.application.GetRoomRatingUseCase;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,15 +29,18 @@ public class ReviewController {
     private final GetReviewsByBookingUseCase getReviewsByBookingUseCase;
     private final GetReviewsByRoomUseCase getReviewsByRoomUseCase;
     private final RespondToReviewUseCase respondToReviewUseCase;
+    private final GetRoomRatingUseCase getRoomRatingUseCase;
 
     public ReviewController(SubmitReviewUseCase submitReviewUseCase,
                             GetReviewsByBookingUseCase getReviewsByBookingUseCase,
                             GetReviewsByRoomUseCase getReviewsByRoomUseCase,
-                            RespondToReviewUseCase respondToReviewUseCase) {
+                            RespondToReviewUseCase respondToReviewUseCase,
+                            GetRoomRatingUseCase getRoomRatingUseCase) {
         this.submitReviewUseCase = submitReviewUseCase;
         this.getReviewsByBookingUseCase = getReviewsByBookingUseCase;
         this.getReviewsByRoomUseCase = getReviewsByRoomUseCase;
         this.respondToReviewUseCase = respondToReviewUseCase;
+        this.getRoomRatingUseCase = getRoomRatingUseCase;
     }
 
     @PostMapping
@@ -77,4 +83,8 @@ public class ReviewController {
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(getReviewsByRoomUseCase.execute(roomId, pageable).map(ReviewResponse::from));
     }
+    @GetMapping("/room/{roomId}/rating")
+    public ResponseEntity<RoomRatingStats> getRating(@PathVariable UUID roomId) {
+    return ResponseEntity.ok(getRoomRatingUseCase.execute(roomId));
+}
 }
