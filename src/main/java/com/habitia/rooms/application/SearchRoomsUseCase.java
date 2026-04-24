@@ -16,6 +16,9 @@ public class SearchRoomsUseCase {
     }
 
     public List<Room> execute(String city, int guests) {
+        if (city == null || city.isBlank()) {
+            return roomRepository.searchAvailableAll(guests);
+        }
         return roomRepository.searchAvailable(city, guests);
     }
 }

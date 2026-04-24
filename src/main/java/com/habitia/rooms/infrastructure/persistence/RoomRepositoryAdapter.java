@@ -7,6 +7,7 @@ import com.habitia.shared.domain.valueobject.Money;
 import com.habitia.shared.domain.valueobject.UserId;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,6 +40,23 @@ public class RoomRepositoryAdapter implements RoomRepository {
     @Override
     public List<Room> searchAvailable(String city, int guests) {
         return jpaRepository.searchAvailable(city, guests)
+                .stream().map(this::toDomain).toList();
+    }
+
+    @Override
+    public List<Room> searchAvailableAll(int guests) {
+        return jpaRepository.searchAvailableAll(guests)
+                .stream().map(this::toDomain).toList();
+    }
+
+    @Override
+    public List<String> findAvailableCities() {
+        return jpaRepository.findAvailableCities();
+    }
+
+    @Override
+    public List<Room> findAvailableByDates(LocalDate checkIn, LocalDate checkOut, int guests) {
+        return jpaRepository.findAvailableByDates(checkIn, checkOut, guests)
                 .stream().map(this::toDomain).toList();
     }
 
