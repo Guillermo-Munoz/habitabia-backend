@@ -1,6 +1,7 @@
 package com.habitia.users.application;
 
 import com.habitia.shared.domain.exception.BusinessRuleException;
+import com.habitia.shared.domain.exception.InvalidCredentialsException;
 import com.habitia.shared.infrastructure.security.JwtTokenProvider;
 import com.habitia.users.domain.User;
 import com.habitia.users.domain.UserRepository;
@@ -33,12 +34,12 @@ public class AuthenticateUserUseCase {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     log.warn("Usuario no encontrado: {}", email);
-                    return new BusinessRuleException("Invalid credentials");
+                    return new InvalidCredentialsException();
                 });
 
-         if (!user.passwordMatches(password, passwordEncoder)) {
+        if (!user.passwordMatches(password, passwordEncoder)) {
             log.warn("Contraseña incorrecta para usuario: {}", email);
-            throw new BusinessRuleException("Invalid credentials");
+            throw new InvalidCredentialsException();
         }
 
         if (!user.isActive()) {
