@@ -2,6 +2,7 @@ package com.habitia.rooms.infrastructure.web;
 
 import com.habitia.rooms.domain.Amenity;
 import com.habitia.rooms.domain.Room;
+import com.habitia.reviews.domain.RoomRatingStats;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,7 +23,9 @@ public record RoomResponse(
         int maxGuests,
         Set<Amenity> amenities,
         String status,
-        List<String> imageUrls
+        List<String> imageUrls,
+        double averageRating,
+        long totalReviews
 ) {
     public static RoomResponse from(Room room) {
         return new RoomResponse(
@@ -39,7 +42,30 @@ public record RoomResponse(
                 room.getMaxGuests(),
                 room.getAmenities(),
                 room.getStatus().name(),
-                room.getImageUrls()
+                room.getImageUrls(),
+                0.0,
+                0L
+        );
+    }
+
+    public static RoomResponse from(Room room, RoomRatingStats stats) {
+        return new RoomResponse(
+                room.getId(),
+                room.getHostId().toString(),
+                room.getTitle(),
+                room.getDescription(),
+                room.getCity(),
+                room.getCountry(),
+                room.getLatitude(),
+                room.getLongitude(),
+                room.getPrice().amount(),
+                room.getPrice().currency(),
+                room.getMaxGuests(),
+                room.getAmenities(),
+                room.getStatus().name(),
+                room.getImageUrls(),
+                stats.averageRating(),
+                stats.totalReview()
         );
     }
 }

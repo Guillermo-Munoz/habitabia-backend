@@ -13,4 +13,5 @@ public interface BookingRepository {
     List<Booking> findByGuestId(UserId guestId);
     List<Booking> findByHostId(UserId hostId);
     boolean existsOverlap(UUID roomId, LocalDate checkIn, LocalDate checkOut);
+    List<Booking> findActiveByRoomId(UUID roomId, LocalDate today);
 }

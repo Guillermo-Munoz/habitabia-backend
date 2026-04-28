@@ -48,6 +48,12 @@ public class BookingRepositoryAdapter implements BookingRepository {
         return jpaRepository.existsOverlap(roomId, checkIn, checkOut);
     }
 
+    @Override
+    public List<Booking> findActiveByRoomId(UUID roomId, LocalDate today) {
+        return jpaRepository.findActiveByRoomId(roomId, today)
+                .stream().map(this::toDomain).toList();
+    }
+
     private BookingJpaEntity toEntity(Booking b) {
         BookingJpaEntity e = new BookingJpaEntity();
         e.setId(b.getId());

@@ -21,4 +21,11 @@ public interface BookingJpaRepository extends JpaRepository<BookingJpaEntity, UU
     boolean existsOverlap(@Param("roomId") UUID roomId,
                           @Param("checkIn") LocalDate checkIn,
                           @Param("checkOut") LocalDate checkOut);
+
+    @Query("SELECT b FROM BookingJpaEntity b " +
+            "WHERE b.roomId = :roomId " +
+            "AND b.status IN ('REQUESTED', 'ACCEPTED', 'CONFIRMED') " +
+            "AND b.checkOut >= :today")
+    List<BookingJpaEntity> findActiveByRoomId(@Param("roomId") UUID roomId,
+                                              @Param("today") LocalDate today);
 }
