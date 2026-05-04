@@ -30,6 +30,10 @@ public class UploadRoomImageUseCase {
             throw new BusinessRuleException("Solo el anfitrión puede subir imágenes a esta habitación");
         }
 
+        if (room.getImageUrls().size() >= 4) {
+            throw new BusinessRuleException("La habitación ya tiene el máximo de 4 imágenes permitidas");
+        }
+
         String imageUrl = storageService.store(file);
         room.addImage(imageUrl);
         return roomRepository.save(room);
