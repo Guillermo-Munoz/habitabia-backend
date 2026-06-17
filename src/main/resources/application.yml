@@ -1,3 +1,5 @@
+server:
+  port: ${PORT:8080}
 spring:
   servlet:
     multipart:
@@ -23,3 +25,6 @@ app:
   storage:
     upload-dir: ./uploads
     base-url: http://localhost:8080
+  cors:
+    allowed-origins: "http://localhost:4200"
+  
