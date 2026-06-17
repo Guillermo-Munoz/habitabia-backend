@@ -6,6 +6,7 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +14,7 @@ import com.habitia.shared.domain.storage.StorageService;
 
 import jakarta.annotation.PostConstruct;
 
+@ConditionalOnProperty(prefix = "app.storage", name = "provider", havingValue = "local", matchIfMissing = true)
 @Service
 public class LocalStorageService implements StorageService {
 

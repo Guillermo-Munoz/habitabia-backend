@@ -23,8 +23,14 @@ app:
     secret: "a4pg1GSnK9CH7x8jHtTeTDKBuFwhuGOAicr2ZXzSOEBM5ZXjzw4r5BEN5UQEOF6UcEmQONyYqbtzeeKMzOTSyF"
     expirationMs: 86400000  # 24h
   storage:
+    provider: ${APP_STORAGE_PROVIDER:local}
     upload-dir: ./uploads
     base-url: http://localhost:8080
   cors:
     allowed-origins: "http://localhost:4200"
+  cloudinary:
+    cloud-name: ${APP_CLOUDINARY_CLOUD_NAME:}
+    api-key: ${APP_CLOUDINARY_API_KEY:}
+    api-secret: ${APP_CLOUDINARY_API_SECRET:}
+
   
